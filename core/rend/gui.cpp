@@ -183,7 +183,7 @@ void gui_initFonts()
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->Clear();
 	const float fontSize = 17.f * settings.display.uiScale;
-	io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, nullptr, ranges);
+	io.Fonts->AddFontFromFileTTF("/usr/share/retroarch-assets/xmb/monochrome/regular.ttf", fontSize, nullptr, ranges);
 	//io.Fonts->AddFontFromMemoryCompressedTTF(roboto_medium_compressed_data, roboto_medium_compressed_size, fontSize, nullptr, ranges);
     ImFontConfig font_cfg;
     font_cfg.MergeMode = true;
