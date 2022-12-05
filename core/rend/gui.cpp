@@ -1224,7 +1224,7 @@ static void gui_display_settings()
 	fullScreenWindow(false);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 
-    ImGui::Begin("设置", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
+    ImGui::Begin("设置(极熊座主机专属汉化)", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
     		| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 	ImVec2 normal_padding = ImGui::GetStyle().FramePadding;
 
