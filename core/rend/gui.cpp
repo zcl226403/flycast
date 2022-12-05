@@ -232,7 +232,7 @@ void gui_initFonts()
 
     if (locale.find("ja") == 0)             // Japanese
     {
-        io.Fonts->AddFontFromFileTTF((fontDir + "ヒラギノ角ゴシック W4.ttc").c_str(), fontSize, &font_cfg, io.Fonts->GetGlyphRangesJapanese());
+        io.Fonts->AddFontFromFileTTF((fontDir + "\u30d2\u30e9\u30ae\u30ce\u89d2\u30b4\u30b7\u30c3\u30af W4.ttc").c_str(), fontSize, &font_cfg, io.Fonts->GetGlyphRangesJapanese());
     }
     else if (locale.find("ko") == 0)       // Korean
     {
@@ -483,12 +483,12 @@ void gui_stop_game(const std::string& message)
 		game_started = false;
 		reset_vmus();
 		if (!message.empty())
-			gui_error("Flycast已停止.\n\n" + message);
+			gui_error("Flycast\u5df2\u505c\u6b62.\n\n" + message);
 	}
 	else
 	{
 		if (!message.empty())
-			ERROR_LOG(COMMON, "Flycast已停止: %s", message.c_str());
+			ERROR_LOG(COMMON, "Flycast\u5df2\u505c\u6b62: %s", message.c_str());
 		// Exit emulator
 		dc_exit();
 	}
@@ -511,7 +511,7 @@ static void gui_display_commands()
 	}
 
 	// Load State
-	if (ImGui::Button("读取存档", ScaledVec2(110, 50)) && !loadSaveStateDisabled)
+	if (ImGui::Button("\u8bfb\u53d6\u5b58\u6863", ScaledVec2(110, 50)) && !loadSaveStateDisabled)
 	{
 		gui_state = GuiState::Closed;
 		dc_loadstate(config::SavestateSlot);
@@ -519,14 +519,14 @@ static void gui_display_commands()
 	ImGui::SameLine();
 
 	// Slot #
-	std::string slot = "档槽 " + std::to_string((int)config::SavestateSlot + 1);
+	std::string slot = "\u6863\u69fd " + std::to_string((int)config::SavestateSlot + 1);
 	if (ImGui::Button(slot.c_str(), ImVec2(80 * settings.display.uiScale - ImGui::GetStyle().FramePadding.x, 50 * settings.display.uiScale)))
 		ImGui::OpenPopup("slot_select_popup");
     if (ImGui::BeginPopup("slot_select_popup"))
     {
         for (int i = 0; i < 10; i++)
             if (ImGui::Selectable(std::to_string(i + 1).c_str(), config::SavestateSlot == i, 0,
-            		ImVec2(ImGui::CalcTextSize("档槽 8").x, 0))) {
+            		ImVec2(ImGui::CalcTextSize("\u6863\u69fd 8").x, 0))) {
                 config::SavestateSlot = i;
                 SaveSettings();
             }
@@ -535,7 +535,7 @@ static void gui_display_commands()
 	ImGui::SameLine();
 
 	// Save State
-	if (ImGui::Button("保存存档", ScaledVec2(110, 50)) && !loadSaveStateDisabled)
+	if (ImGui::Button("\u4fdd\u5b58\u5b58\u6863", ScaledVec2(110, 50)) && !loadSaveStateDisabled)
 	{
 		gui_state = GuiState::Closed;
 		dc_savestate(config::SavestateSlot);
@@ -549,12 +549,12 @@ static void gui_display_commands()
 	ImGui::Columns(2, "buttons", false);
 
 	// Settings
-	if (ImGui::Button("设置", ScaledVec2(150, 50)))
+	if (ImGui::Button("\u8bbe\u7f6e", ScaledVec2(150, 50)))
 	{
 		gui_state = GuiState::Settings;
 	}
 	ImGui::NextColumn();
-	if (ImGui::Button("重新开始", ScaledVec2(150, 50)))
+	if (ImGui::Button("\u91cd\u65b0\u5f00\u59cb", ScaledVec2(150, 50)))
 	{
 		GamepadDevice::load_system_mappings();
 		gui_state = GuiState::Closed;
@@ -563,7 +563,7 @@ static void gui_display_commands()
 	ImGui::NextColumn();
 
 	// Insert/Eject Disk
-	const char *disk_label = libGDR_GetDiscType() == Open ? "放入磁盘" : "弹出磁盘";
+	const char *disk_label = libGDR_GetDiscType() == Open ? "\u653e\u5165\u78c1\u76d8" : "\u5f39\u51fa\u78c1\u76d8";
 	if (ImGui::Button(disk_label, ScaledVec2(150, 50)))
 	{
 		if (libGDR_GetDiscType() == Open)
@@ -584,7 +584,7 @@ static void gui_display_commands()
         ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
         ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 	}
-	if (ImGui::Button("金手指", ScaledVec2(150, 50)) && !settings.network.online)
+	if (ImGui::Button("\u91d1\u624b\u6307", ScaledVec2(150, 50)) && !settings.network.online)
 	{
 		gui_state = GuiState::Cheats;
 	}
@@ -596,7 +596,7 @@ static void gui_display_commands()
 	ImGui::Columns(1, nullptr, false);
 
 	// Exit
-	if (ImGui::Button("退出", ScaledVec2(300, 50)
+	if (ImGui::Button("\u9000\u51fa", ScaledVec2(300, 50)
 			+ ImVec2(ImGui::GetStyle().ColumnsMinSpacing + ImGui::GetStyle().FramePadding.x * 2 - 1, 0)))
 	{
 		gui_stop_game();
@@ -612,8 +612,8 @@ inline static void header(const char *title)
 	ImGui::PopStyleVar();
 }
 
-const char *maple_device_types[] = { "没有", "世嘉控制器", "光枪", "键盘", "鼠标", "Twin Stick", "Ascii Stick" };
-const char *maple_expansion_device_types[] = { "没有", "世嘉VMU", "Purupuru", "Microphone" };
+const char *maple_device_types[] = { "\u6ca1\u6709", "\u4e16\u5609\u63a7\u5236\u5668", "\u5149\u67aa", "\u952e\u76d8", "\u9f20\u6807", "Twin Stick", "Ascii Stick" };
+const char *maple_expansion_device_types[] = { "\u6ca1\u6709", "\u4e16\u5609VMU", "Purupuru", "Microphone" };
 
 static const char *maple_device_name(MapleDeviceType type)
 {
@@ -675,7 +675,7 @@ static const char *maple_expansion_device_name(MapleDeviceType type)
 	}
 }
 
-const char *maple_ports[] = { "没有", "A", "B", "C", "D", "全部" };
+const char *maple_ports[] = { "\u6ca1\u6709", "A", "B", "C", "D", "\u5168\u90e8" };
 
 struct Mapping {
 	DreamcastKey key;
@@ -683,23 +683,23 @@ struct Mapping {
 };
 
 const Mapping dcButtons[] = {
-	{ EMU_BTN_NONE, "方向" },
-	{ DC_DPAD_UP, "上" },
-	{ DC_DPAD_DOWN, "下" },
-	{ DC_DPAD_LEFT, "左" },
-	{ DC_DPAD_RIGHT, "右" },
+	{ EMU_BTN_NONE, "\u65b9\u5411" },
+	{ DC_DPAD_UP, "\u4e0a" },
+	{ DC_DPAD_DOWN, "\u4e0b" },
+	{ DC_DPAD_LEFT, "\u5de6" },
+	{ DC_DPAD_RIGHT, "\u53f3" },
 
-	{ DC_AXIS_UP, "拇指摇杆 上" },
-	{ DC_AXIS_DOWN, "拇指摇杆 下" },
-	{ DC_AXIS_LEFT, "拇指摇杆 左" },
-	{ DC_AXIS_RIGHT, "拇指摇杆 右" },
+	{ DC_AXIS_UP, "\u62c7\u6307\u6447\u6746 \u4e0a" },
+	{ DC_AXIS_DOWN, "\u62c7\u6307\u6447\u6746 \u4e0b" },
+	{ DC_AXIS_LEFT, "\u62c7\u6307\u6447\u6746 \u5de6" },
+	{ DC_AXIS_RIGHT, "\u62c7\u6307\u6447\u6746 \u53f3" },
 
-	{ DC_DPAD2_UP, "控制器2 上" },
-	{ DC_DPAD2_DOWN, "控制器2 下" },
-	{ DC_DPAD2_LEFT, "控制器2 左" },
-	{ DC_DPAD2_RIGHT, "控制器2 右" },
+	{ DC_DPAD2_UP, "\u63a7\u5236\u56682 \u4e0a" },
+	{ DC_DPAD2_DOWN, "\u63a7\u5236\u56682 \u4e0b" },
+	{ DC_DPAD2_LEFT, "\u63a7\u5236\u56682 \u5de6" },
+	{ DC_DPAD2_RIGHT, "\u63a7\u5236\u56682 \u53f3" },
 
-	{ EMU_BTN_NONE, "按键" },
+	{ EMU_BTN_NONE, "\u6309\u952e" },
 	{ DC_BTN_A, "A" },
 	{ DC_BTN_B, "B" },
 	{ DC_BTN_X, "X" },
@@ -708,66 +708,66 @@ const Mapping dcButtons[] = {
 	{ DC_BTN_D, "D" },
 	{ DC_BTN_Z, "Z" },
 
-	{ EMU_BTN_NONE, "触发器" },
-	{ DC_AXIS_LT, "左 触发器" },
-	{ DC_AXIS_RT, "右 触发器" },
+	{ EMU_BTN_NONE, "\u89e6\u53d1\u5668" },
+	{ DC_AXIS_LT, "\u5de6 \u89e6\u53d1\u5668" },
+	{ DC_AXIS_RT, "\u53f3 \u89e6\u53d1\u5668" },
 
-	{ EMU_BTN_NONE, "系统按键" },
-	{ DC_BTN_START, "开始" },
-	{ DC_BTN_RELOAD, "重新加载" },
+	{ EMU_BTN_NONE, "\u7cfb\u7edf\u6309\u952e" },
+	{ DC_BTN_START, "\u5f00\u59cb" },
+	{ DC_BTN_RELOAD, "\u91cd\u65b0\u52a0\u8f7d" },
 
-	{ EMU_BTN_NONE, "模拟器" },
-	{ EMU_BTN_MENU, "菜单" },
-	{ EMU_BTN_ESCAPE, "退出" },
-	{ EMU_BTN_FFORWARD, "快进" },
+	{ EMU_BTN_NONE, "\u6a21\u62df\u5668" },
+	{ EMU_BTN_MENU, "\u83dc\u5355" },
+	{ EMU_BTN_ESCAPE, "\u9000\u51fa" },
+	{ EMU_BTN_FFORWARD, "\u5feb\u8fdb" },
 
 	{ EMU_BTN_NONE, nullptr }
 };
 
 const Mapping arcadeButtons[] = {
-	{ EMU_BTN_NONE, "方向" },
-	{ DC_DPAD_UP, "上" },
-	{ DC_DPAD_DOWN, "下" },
-	{ DC_DPAD_LEFT, "左" },
-	{ DC_DPAD_RIGHT, "右" },
+	{ EMU_BTN_NONE, "\u65b9\u5411" },
+	{ DC_DPAD_UP, "\u4e0a" },
+	{ DC_DPAD_DOWN, "\u4e0b" },
+	{ DC_DPAD_LEFT, "\u5de6" },
+	{ DC_DPAD_RIGHT, "\u53f3" },
 
-	{ DC_AXIS_UP, "拇指摇杆 上" },
-	{ DC_AXIS_DOWN, "拇指摇杆 下" },
-	{ DC_AXIS_LEFT, "拇指摇杆 左" },
-	{ DC_AXIS_RIGHT, "拇指摇杆 右" },
+	{ DC_AXIS_UP, "\u62c7\u6307\u6447\u6746 \u4e0a" },
+	{ DC_AXIS_DOWN, "\u62c7\u6307\u6447\u6746 \u4e0b" },
+	{ DC_AXIS_LEFT, "\u62c7\u6307\u6447\u6746 \u5de6" },
+	{ DC_AXIS_RIGHT, "\u62c7\u6307\u6447\u6746 \u53f3" },
 
-	{ DC_AXIS2_UP, "右.拇指摇杆 上" },
-	{ DC_AXIS2_DOWN, "右.拇指摇杆 下" },
-	{ DC_AXIS2_LEFT, "右.拇指摇杆 左" },
-	{ DC_AXIS2_RIGHT, "右.拇指摇杆 右" },
+	{ DC_AXIS2_UP, "\u53f3.\u62c7\u6307\u6447\u6746 \u4e0a" },
+	{ DC_AXIS2_DOWN, "\u53f3.\u62c7\u6307\u6447\u6746 \u4e0b" },
+	{ DC_AXIS2_LEFT, "\u53f3.\u62c7\u6307\u6447\u6746 \u5de6" },
+	{ DC_AXIS2_RIGHT, "\u53f3.\u62c7\u6307\u6447\u6746 \u53f3" },
 
-	{ EMU_BTN_NONE, "按键" },
-	{ DC_BTN_A, "按键 1" },
-	{ DC_BTN_B, "按键 2" },
-	{ DC_BTN_C, "按键 3" },
-	{ DC_BTN_X, "按键 4" },
-	{ DC_BTN_Y, "按键 5" },
-	{ DC_BTN_Z, "按键 6" },
-	{ DC_DPAD2_LEFT, "按键 7" },
-	{ DC_DPAD2_RIGHT, "按键 8" },
+	{ EMU_BTN_NONE, "\u6309\u952e" },
+	{ DC_BTN_A, "\u6309\u952e 1" },
+	{ DC_BTN_B, "\u6309\u952e 2" },
+	{ DC_BTN_C, "\u6309\u952e 3" },
+	{ DC_BTN_X, "\u6309\u952e 4" },
+	{ DC_BTN_Y, "\u6309\u952e 5" },
+	{ DC_BTN_Z, "\u6309\u952e 6" },
+	{ DC_DPAD2_LEFT, "\u6309\u952e 7" },
+	{ DC_DPAD2_RIGHT, "\u6309\u952e 8" },
 //	{ DC_DPAD2_RIGHT, "Button 9" }, // TODO
 
-	{ EMU_BTN_NONE, "触发器" },
-	{ DC_AXIS_LT, "左触发器" },
-	{ DC_AXIS_RT, "右触发器" },
+	{ EMU_BTN_NONE, "\u89e6\u53d1\u5668" },
+	{ DC_AXIS_LT, "\u5de6\u89e6\u53d1\u5668" },
+	{ DC_AXIS_RT, "\u53f3\u89e6\u53d1\u5668" },
 
-	{ EMU_BTN_NONE, "系统按键" },
-	{ DC_BTN_START, "开始" },
+	{ EMU_BTN_NONE, "\u7cfb\u7edf\u6309\u952e" },
+	{ DC_BTN_START, "\u5f00\u59cb" },
 	{ DC_BTN_RELOAD, "Reload" },
 	{ DC_BTN_D, "Coin" },
 	{ DC_DPAD2_UP, "Service" },
 	{ DC_DPAD2_DOWN, "Test" },
 
-	{ EMU_BTN_NONE, "重新加载" },
-	{ EMU_BTN_MENU, "菜单" },
-	{ EMU_BTN_ESCAPE, "退出" },
-	{ EMU_BTN_FFORWARD, "快进" },
-	{ EMU_BTN_INSERT_CARD, "插入卡" },
+	{ EMU_BTN_NONE, "\u91cd\u65b0\u52a0\u8f7d" },
+	{ EMU_BTN_MENU, "\u83dc\u5355" },
+	{ EMU_BTN_ESCAPE, "\u9000\u51fa" },
+	{ EMU_BTN_FFORWARD, "\u5feb\u8fdb" },
+	{ EMU_BTN_INSERT_CARD, "\u63d2\u5165\u5361" },
 
 	{ EMU_BTN_NONE, nullptr }
 };
@@ -847,11 +847,11 @@ static void detect_input_popup(const Mapping *mapping)
 	ImVec2 padding = ScaledVec2(20, 20);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, padding);
-	if (ImGui::BeginPopupModal("映射控制", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("\u6620\u5c04\u63a7\u5236", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
-		ImGui::Text("等待控制 '%s'...", mapping->name);
+		ImGui::Text("\u7b49\u5f85\u63a7\u5236 '%s'...", mapping->name);
 		double now = os_GetSeconds();
-		ImGui::Text("暂停在 %d s", (int)(5 - (now - map_start_time)));
+		ImGui::Text("\u6682\u505c\u5728 %d s", (int)(5 - (now - map_start_time)));
 		if (mapped_code != (u32)-1)
 		{
 			std::shared_ptr<InputMapping> input_mapping = mapped_device->get_input_mapping();
@@ -916,7 +916,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 {
 	fullScreenWindow(true);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-	if (ImGui::BeginPopupModal("控制器映射", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("\u63a7\u5236\u5668\u6620\u5c04", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		const ImGuiStyle& style = ImGui::GetStyle();
 		const float winWidth = ImGui::GetIO().DisplaySize.x - insetLeft - insetRight - (style.WindowBorderSize + style.WindowPadding.x) * 2;
@@ -929,7 +929,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 		static int last_item_current_map_idx = 2;
 
 		std::shared_ptr<InputMapping> input_mapping = gamepad->get_input_mapping();
-		if (input_mapping == NULL || ImGui::Button("完成", ScaledVec2(100, 30)))
+		if (input_mapping == NULL || ImGui::Button("\u5b8c\u6210", ScaledVec2(100, 30)))
 		{
 			ImGui::CloseCurrentPopup();
 			gamepad->save_mapping(map_system);
@@ -947,7 +947,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, (30 * scaling - ImGui::GetFontSize()) / 2));
 			portWidth = ImGui::CalcTextSize("AA").x + ImGui::GetStyle().ItemSpacing.x * 2.0f + ImGui::GetFontSize();
 			ImGui::SetNextItemWidth(portWidth);
-			if (ImGui::BeginCombo("端口", maple_ports[gamepad_port + 1]))
+			if (ImGui::BeginCombo("\u7aef\u53e3", maple_ports[gamepad_port + 1]))
 			{
 				for (u32 j = 0; j < MAPLE_PORTS; j++)
 				{
@@ -959,13 +959,13 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 				}
 				ImGui::EndCombo();
 			}
-			portWidth += ImGui::CalcTextSize("端口").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x;
+			portWidth += ImGui::CalcTextSize("\u7aef\u53e3").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x;
 			ImGui::PopStyleVar();
 		}
-		float comboWidth = ImGui::CalcTextSize("Dreamcast控制").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4;
+		float comboWidth = ImGui::CalcTextSize("Dreamcast\u63a7\u5236").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4;
 		float gameConfigWidth = 0;
 		if (!settings.content.gameId.empty())
-			gameConfigWidth = ImGui::CalcTextSize(gamepad->isPerGameMapping() ? "删除游戏配置" : "创建游戏配置").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x * 2;
+			gameConfigWidth = ImGui::CalcTextSize(gamepad->isPerGameMapping() ? "\u5220\u9664\u6e38\u620f\u914d\u7f6e" : "\u521b\u5efa\u6e38\u620f\u914d\u7f6e").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x * 2;
 		ImGui::SameLine(0, ImGui::GetContentRegionAvail().x - comboWidth - gameConfigWidth - ImGui::GetStyle().ItemSpacing.x - 100 * scaling * 2 - portWidth);
 
 		ImGui::AlignTextToFramePadding();
@@ -974,7 +974,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 		{
 			if (gamepad->isPerGameMapping())
 			{
-				if (ImGui::Button("删除游戏配置", ScaledVec2(0, 30)))
+				if (ImGui::Button("\u5220\u9664\u6e38\u620f\u914d\u7f6e", ScaledVec2(0, 30)))
 				{
 					gamepad->setPerGameMapping(false);
 					if (!gamepad->find_mapping(map_system))
@@ -983,26 +983,26 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			}
 			else
 			{
-				if (ImGui::Button("创建游戏配置", ScaledVec2(0, 30)))
+				if (ImGui::Button("\u521b\u5efa\u6e38\u620f\u914d\u7f6e", ScaledVec2(0, 30)))
 					gamepad->setPerGameMapping(true);
 			}
 			ImGui::SameLine();
 		}
-		if (ImGui::Button("重置...", ScaledVec2(100, 30)))
-			ImGui::OpenPopup("确认重置");
+		if (ImGui::Button("\u91cd\u7f6e...", ScaledVec2(100, 30)))
+			ImGui::OpenPopup("\u786e\u8ba4\u91cd\u7f6e");
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ScaledVec2(20, 20));
-		if (ImGui::BeginPopupModal("确认重置", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+		if (ImGui::BeginPopupModal("\u786e\u8ba4\u91cd\u7f6e", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 		{
-			ImGui::Text("是否确实要将映射重置为默认值？");
+			ImGui::Text("\u662f\u5426\u786e\u5b9e\u8981\u5c06\u6620\u5c04\u91cd\u7f6e\u4e3a\u9ed8\u8ba4\u503c\uff1f");
 			static bool hitbox;
 			if (arcade_button_mode)
 			{
-				ImGui::Text("控制器类型:");
-				if (ImGui::RadioButton("游戏控制器", !hitbox))
+				ImGui::Text("\u63a7\u5236\u5668\u7c7b\u578b:");
+				if (ImGui::RadioButton("\u6e38\u620f\u63a7\u5236\u5668", !hitbox))
 					hitbox = false;
 				ImGui::SameLine();
-				if (ImGui::RadioButton("街机 / Hit Box", hitbox))
+				if (ImGui::RadioButton("\u8857\u673a / Hit Box", hitbox))
 					hitbox = true;
 			}
 			ImGui::NewLine();
@@ -1025,7 +1025,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 
 		ImGui::SameLine();
 
-		const char* items[] = { "Dreamcast控制", "街机控制" };
+		const char* items[] = { "Dreamcast\u63a7\u5236", "\u8857\u673a\u63a7\u5236" };
 
 		// Here our selection data is an index.
 
@@ -1096,10 +1096,10 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			displayMappedControl(gamepad, systemMapping->key);
 
 			ImGui::NextColumn();
-			if (ImGui::Button("映射"))
+			if (ImGui::Button("\u6620\u5c04"))
 			{
 				map_start_time = os_GetSeconds();
-				ImGui::OpenPopup("映射控制");
+				ImGui::OpenPopup("\u6620\u5c04\u63a7\u5236");
 				mapped_device = gamepad;
 				mapped_code = -1;
 				gamepad->detectButtonOrAxisInput([](u32 code, bool analog, bool positive)
@@ -1167,15 +1167,15 @@ static void contentpath_warning_popup()
 
     if (scanner.content_path_looks_incorrect)
     {
-        ImGui::OpenPopup("内容位置不正确？");
-        if (ImGui::BeginPopupModal("内容位置不正确？", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+        ImGui::OpenPopup("\u5185\u5bb9\u4f4d\u7f6e\u4e0d\u6b63\u786e\uff1f");
+        if (ImGui::BeginPopupModal("\u5185\u5bb9\u4f4d\u7f6e\u4e0d\u6b63\u786e\uff1f", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
         {
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + 400.f * settings.display.uiScale);
-            ImGui::TextWrapped("  已扫描 %d 文件夹，但找不到游戏！  ", scanner.empty_folders_scanned);
+            ImGui::TextWrapped("  \u5df2\u626b\u63cf %d \u6587\u4ef6\u5939\uff0c\u4f46\u627e\u4e0d\u5230\u6e38\u620f\uff01  ", scanner.empty_folders_scanned);
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(16, 3));
             float currentwidth = ImGui::GetContentRegionAvail().x;
             ImGui::SetCursorPosX((currentwidth - 100.f * settings.display.uiScale) / 2.f + ImGui::GetStyle().WindowPadding.x - 55.f * settings.display.uiScale);
-            if (ImGui::Button("重新选择", ScaledVec2(100.f, 0)))
+            if (ImGui::Button("\u91cd\u65b0\u9009\u62e9", ScaledVec2(100.f, 0)))
             {
             	scanner.content_path_looks_incorrect = false;
                 ImGui::CloseCurrentPopup();
@@ -1184,7 +1184,7 @@ static void contentpath_warning_popup()
 
             ImGui::SameLine();
             ImGui::SetCursorPosX((currentwidth - 100.f * settings.display.uiScale) / 2.f + ImGui::GetStyle().WindowPadding.x + 55.f * settings.display.uiScale);
-            if (ImGui::Button("取消", ScaledVec2(100.f, 0)))
+            if (ImGui::Button("\u53d6\u6d88", ScaledVec2(100.f, 0)))
             {
             	scanner.content_path_looks_incorrect = false;
                 ImGui::CloseCurrentPopup();
@@ -1199,8 +1199,8 @@ static void contentpath_warning_popup()
     if (show_contentpath_selection)
     {
         scanner.stop();
-        ImGui::OpenPopup("选择目录");
-        select_file_popup("选择目录", [](bool cancelled, std::string selection)
+        ImGui::OpenPopup("\u9009\u62e9\u76ee\u5f55");
+        select_file_popup("\u9009\u62e9\u76ee\u5f55", [](bool cancelled, std::string selection)
         {
             show_contentpath_selection = false;
             if (!cancelled)
@@ -1221,11 +1221,11 @@ static void gui_display_settings()
 	fullScreenWindow(false);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 
-    ImGui::Begin("设置", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
+    ImGui::Begin("\u8bbe\u7f6e", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
     		| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 	ImVec2 normal_padding = ImGui::GetStyle().FramePadding;
 
-    if (ImGui::Button("完成", ScaledVec2(100, 30)))
+    if (ImGui::Button("\u5b8c\u6210", ScaledVec2(100, 30)))
     {
     	if (game_started)
     		gui_state = GuiState::Commands;
@@ -1248,7 +1248,7 @@ static void gui_display_settings()
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(16 * settings.display.uiScale, normal_padding.y));
 		if (config::Settings::instance().hasPerGameConfig())
 		{
-			if (ImGui::Button("删除游戏配置", ScaledVec2(0, 30)))
+			if (ImGui::Button("\u5220\u9664\u6e38\u620f\u914d\u7f6e", ScaledVec2(0, 30)))
 			{
 				config::Settings::instance().setPerGameConfig(false);
 				config::Settings::instance().load(false);
@@ -1257,7 +1257,7 @@ static void gui_display_settings()
 		}
 		else
 		{
-			if (ImGui::Button("创建游戏配置", ScaledVec2(0, 30)))
+			if (ImGui::Button("\u521b\u5efa\u6e38\u620f\u914d\u7f6e", ScaledVec2(0, 30)))
 				config::Settings::instance().setPerGameConfig(true);
 		}
 	    ImGui::PopStyleVar();
@@ -1265,22 +1265,22 @@ static void gui_display_settings()
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(16, 6));
 
-    if (ImGui::BeginTabBar("设置", ImGuiTabBarFlags_NoTooltip))
+    if (ImGui::BeginTabBar("\u8bbe\u7f6e", ImGuiTabBarFlags_NoTooltip))
     {
-		if (ImGui::BeginTabItem("概述"))
+		if (ImGui::BeginTabItem("\u6982\u8ff0"))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
-			const char *languages[] = { "Japanese", "English", "German", "French", "Spanish", "Italian", "默认" };
-			OptionComboBox("语言", config::Language, languages, ARRAY_SIZE(languages),
-				"Dreamcast BIOS中配置的语言");
+			const char *languages[] = { "Japanese", "English", "German", "French", "Spanish", "Italian", "\u9ed8\u8ba4" };
+			OptionComboBox("\u8bed\u8a00", config::Language, languages, ARRAY_SIZE(languages),
+				"Dreamcast BIOS\u4e2d\u914d\u7f6e\u7684\u8bed\u8a00");
 
-			const char *broadcast[] = { "NTSC", "PAL", "PAL/M", "PAL/N", "默认" };
-			OptionComboBox("广播", config::Broadcast, broadcast, ARRAY_SIZE(broadcast),
-					"非VGA模式的电视广播标准");
+			const char *broadcast[] = { "NTSC", "PAL", "PAL/M", "PAL/N", "\u9ed8\u8ba4" };
+			OptionComboBox("\u5e7f\u64ad", config::Broadcast, broadcast, ARRAY_SIZE(broadcast),
+					"\u975eVGA\u6a21\u5f0f\u7684\u7535\u89c6\u5e7f\u64ad\u6807\u51c6");
 
-			const char *region[] = { "Japan", "USA", "Europe", "默认" };
-			OptionComboBox("区域", config::Region, region, ARRAY_SIZE(region),
-						"BIOS区域");
+			const char *region[] = { "Japan", "USA", "Europe", "\u9ed8\u8ba4" };
+			OptionComboBox("\u533a\u57df", config::Region, region, ARRAY_SIZE(region),
+						"BIOS\u533a\u57df");
 
 			const char *cable[] = { "VGA", "RGB Component", "TV Composite" };
 			if (config::Cable.isReadOnly())
@@ -1288,7 +1288,7 @@ static void gui_display_settings()
 		        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 		        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 			}
-			if (ImGui::BeginCombo("缆绳", cable[config::Cable == 0 ? 0 : config::Cable - 1], ImGuiComboFlags_None))
+			if (ImGui::BeginCombo("\u7f06\u7ef3", cable[config::Cable == 0 ? 0 : config::Cable - 1], ImGuiComboFlags_None))
 			{
 				for (int i = 0; i < IM_ARRAYSIZE(cable); i++)
 				{
@@ -1306,7 +1306,7 @@ static void gui_display_settings()
 		        ImGui::PopStyleVar();
 			}
             ImGui::SameLine();
-            ShowHelpMarker("视频连接类型");
+            ShowHelpMarker("\u89c6\u9891\u8fde\u63a5\u7c7b\u578b");
 
 #if !defined(TARGET_IPHONE)
             ImVec2 size;
@@ -1314,7 +1314,7 @@ static void gui_display_settings()
             size.y = (ImGui::GetTextLineHeightWithSpacing() + ImGui::GetStyle().FramePadding.y * 2.f)
             				* (config::ContentPath.get().size() + 1) ;//+ ImGui::GetStyle().FramePadding.y * 2.f;
 
-            if (ImGui::ListBoxHeader("内容位置", size))
+            if (ImGui::ListBoxHeader("\u5185\u5bb9\u4f4d\u7f6e", size))
             {
             	int to_delete = -1;
                 for (u32 i = 0; i < config::ContentPath.get().size(); i++)
@@ -1328,9 +1328,9 @@ static void gui_display_settings()
                 	ImGui::PopID();
                 }
                 ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(24, 3));
-                if (ImGui::Button("添加"))
-                	ImGui::OpenPopup("选择目录");
-                select_file_popup("选择目录", [](bool cancelled, std::string selection)
+                if (ImGui::Button("\u6dfb\u52a0"))
+                	ImGui::OpenPopup("\u9009\u62e9\u76ee\u5f55");
+                select_file_popup("\u9009\u62e9\u76ee\u5f55", [](bool cancelled, std::string selection)
                 		{
                 			if (!cancelled)
                 			{
@@ -1352,62 +1352,62 @@ static void gui_display_settings()
             	}
             }
             ImGui::SameLine();
-            ShowHelpMarker("存储游戏的目录");
+            ShowHelpMarker("\u5b58\u50a8\u6e38\u620f\u7684\u76ee\u5f55");
 
 #if defined(__linux__) && !defined(__ANDROID__)
-            if (ImGui::ListBoxHeader("数据目录", 1))
+            if (ImGui::ListBoxHeader("\u6570\u636e\u76ee\u5f55", 1))
             {
             	ImGui::AlignTextToFramePadding();
                 ImGui::Text("%s", get_writable_data_path("").c_str());
                 ImGui::ListBoxFooter();
             }
             ImGui::SameLine();
-            ShowHelpMarker("包含BIOS文件以及保存的VMU和状态的目录");
+            ShowHelpMarker("\u5305\u542bBIOS\u6587\u4ef6\u4ee5\u53ca\u4fdd\u5b58\u7684VMU\u548c\u72b6\u6001\u7684\u76ee\u5f55");
 #else
-            if (ImGui::ListBoxHeader("主目录", 1))
+            if (ImGui::ListBoxHeader("\u4e3b\u76ee\u5f55", 1))
             {
             	ImGui::AlignTextToFramePadding();
                 ImGui::Text("%s", get_writable_config_path("").c_str());
 #ifdef __ANDROID__
-                ImGui::SameLine(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("更换").x - ImGui::GetStyle().FramePadding.x);
-                if (ImGui::Button("更换"))
+                ImGui::SameLine(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("\u66f4\u6362").x - ImGui::GetStyle().FramePadding.x);
+                if (ImGui::Button("\u66f4\u6362"))
                 	gui_state = GuiState::Onboarding;
 #endif
                 ImGui::ListBoxFooter();
             }
             ImGui::SameLine();
-            ShowHelpMarker("Flycast保存配置文件和VMU的目录。BIOS文件应位于名为 \"data\" 的子文件夹中");
+            ShowHelpMarker("Flycast\u4fdd\u5b58\u914d\u7f6e\u6587\u4ef6\u548cVMU\u7684\u76ee\u5f55\u3002BIOS\u6587\u4ef6\u5e94\u4f4d\u4e8e\u540d\u4e3a \"data\" \u7684\u5b50\u6587\u4ef6\u5939\u4e2d");
 #endif // !linux
 #endif // !TARGET_IPHONE
 
-			if (OptionCheckbox("隐藏旧版 Naomi Roms", config::HideLegacyNaomiRoms,
-					"从内容浏览器中隐藏.bin、.dat和.lst文件"))
+			if (OptionCheckbox("\u9690\u85cf\u65e7\u7248 Naomi Roms", config::HideLegacyNaomiRoms,
+					"\u4ece\u5185\u5bb9\u6d4f\u89c8\u5668\u4e2d\u9690\u85cf.bin\u3001.dat\u548c.lst\u6587\u4ef6"))
 				scanner.refresh();
-	    	ImGui::Text("自动状态:");
-			OptionCheckbox("加载", config::AutoLoadState,
-					"启动时加载游戏的上次保存状态");
+	    	ImGui::Text("\u81ea\u52a8\u72b6\u6001:");
+			OptionCheckbox("\u52a0\u8f7d", config::AutoLoadState,
+					"\u542f\u52a8\u65f6\u52a0\u8f7d\u6e38\u620f\u7684\u4e0a\u6b21\u4fdd\u5b58\u72b6\u6001");
 			ImGui::SameLine();
-			OptionCheckbox("保存", config::AutoSaveState,
-					"停止时保存游戏状态");
-			OptionCheckbox("Naomi免费玩", config::ForceFreePlay, "在免费玩模式下配置Naomi游戏。");
+			OptionCheckbox("\u4fdd\u5b58", config::AutoSaveState,
+					"\u505c\u6b62\u65f6\u4fdd\u5b58\u6e38\u620f\u72b6\u6001");
+			OptionCheckbox("Naomi\u514d\u8d39\u73a9", config::ForceFreePlay, "\u5728\u514d\u8d39\u73a9\u6a21\u5f0f\u4e0b\u914d\u7f6eNaomi\u6e38\u620f\u3002");
 
 			ImGui::PopStyleVar();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("控制"))
+		if (ImGui::BeginTabItem("\u63a7\u5236"))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
-			header("物理设备");
+			header("\u7269\u7406\u8bbe\u5907");
 		    {
-				ImGui::Columns(4, "物理设备", false);
+				ImGui::Columns(4, "\u7269\u7406\u8bbe\u5907", false);
 				ImVec4 gray{ 0.5f, 0.5f, 0.5f, 1.f };
-				ImGui::TextColored(gray, "系统");
-				ImGui::SetColumnWidth(-1, ImGui::CalcTextSize("系统").x + ImGui::GetStyle().FramePadding.x * 2.0f + ImGui::GetStyle().ItemSpacing.x);
+				ImGui::TextColored(gray, "\u7cfb\u7edf");
+				ImGui::SetColumnWidth(-1, ImGui::CalcTextSize("\u7cfb\u7edf").x + ImGui::GetStyle().FramePadding.x * 2.0f + ImGui::GetStyle().ItemSpacing.x);
 				ImGui::NextColumn();
-				ImGui::TextColored(gray, "名字");
+				ImGui::TextColored(gray, "\u540d\u5b57");
 				ImGui::NextColumn();
-				ImGui::TextColored(gray, "端口");
-				ImGui::SetColumnWidth(-1, ImGui::CalcTextSize("没有").x * 1.6f + ImGui::GetStyle().FramePadding.x * 2.0f + ImGui::GetFrameHeight()
+				ImGui::TextColored(gray, "\u7aef\u53e3");
+				ImGui::SetColumnWidth(-1, ImGui::CalcTextSize("\u6ca1\u6709").x * 1.6f + ImGui::GetStyle().FramePadding.x * 2.0f + ImGui::GetFrameHeight()
 					+ ImGui::GetStyle().ItemInnerSpacing.x	+ ImGui::GetStyle().ItemSpacing.x);
 				ImGui::NextColumn();
 				ImGui::NextColumn();
@@ -1437,10 +1437,10 @@ static void gui_display_settings()
 						ImGui::EndCombo();
 					}
 					ImGui::NextColumn();
-					if (gamepad->remappable() && ImGui::Button("映射"))
+					if (gamepad->remappable() && ImGui::Button("\u6620\u5c04"))
 					{
 						gamepad_port = 0;
-						ImGui::OpenPopup("控制器映射");
+						ImGui::OpenPopup("\u63a7\u5236\u5668\u6620\u5c04");
 					}
 
 					controller_mapping_popup(gamepad);
@@ -1448,13 +1448,13 @@ static void gui_display_settings()
 #ifdef __ANDROID__
 					if (gamepad->is_virtual_gamepad())
 					{
-						if (ImGui::Button("编辑"))
+						if (ImGui::Button("\u7f16\u8f91"))
 						{
 							vjoy_start_editing();
 							gui_state = GuiState::VJoyEdit;
 						}
 						ImGui::SameLine();
-						OptionSlider("触摸式", config::VirtualGamepadVibration, 0, 60);
+						OptionSlider("\u89e6\u6478\u5f0f", config::VirtualGamepadVibration, 0, 60);
 					}
 					else
 #endif
@@ -1473,17 +1473,17 @@ static void gui_display_settings()
 	    	ImGui::Columns(1, NULL, false);
 
 	    	ImGui::Spacing();
-	    	OptionSlider("鼠标灵敏度", config::MouseSensitivity, 1, 500);
+	    	OptionSlider("\u9f20\u6807\u7075\u654f\u5ea6", config::MouseSensitivity, 1, 500);
 #if defined(_WIN32) && !defined(TARGET_UWP)
-	    	OptionCheckbox("使用原始输入", config::UseRawInput, "支持多个定点设备（鼠标、光枪）和键盘");
+	    	OptionCheckbox("\u4f7f\u7528\u539f\u59cb\u8f93\u5165", config::UseRawInput, "\u652f\u6301\u591a\u4e2a\u5b9a\u70b9\u8bbe\u5907\uff08\u9f20\u6807\u3001\u5149\u67aa\uff09\u548c\u952e\u76d8");
 #endif
 
 			ImGui::Spacing();
-			header("Dreamcast设备");
+			header("Dreamcast\u8bbe\u5907");
 		    {
 				for (int bus = 0; bus < MAPLE_PORTS; bus++)
 				{
-					ImGui::Text("设备 %c", bus + 'A');
+					ImGui::Text("\u8bbe\u5907 %c", bus + 'A');
 					ImGui::SameLine();
 					char device_name[32];
 					sprintf(device_name, "##device%d", bus);
@@ -1568,7 +1568,7 @@ static void gui_display_settings()
 			ImGui::PopStyleVar();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("画面"))
+		if (ImGui::BeginTabItem("\u753b\u9762"))
 		{
 			int renderApi;
 			bool perPixel;
@@ -1607,23 +1607,23 @@ static void gui_display_settings()
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
 			const bool has_per_pixel = GraphicsContext::Instance()->hasPerPixel();
-		    header("透明排序");
+		    header("\u900f\u660e\u6392\u5e8f");
 		    {
 		    	int renderer = perPixel ? 2 : config::PerStripSorting ? 1 : 0;
-		    	ImGui::Columns(has_per_pixel ? 3 : 2, "渲染器", false);
-		    	ImGui::RadioButton("Per三角", &renderer, 0);
+		    	ImGui::Columns(has_per_pixel ? 3 : 2, "\u6e32\u67d3\u5668", false);
+		    	ImGui::RadioButton("Per\u4e09\u89d2", &renderer, 0);
 	            ImGui::SameLine();
-	            ShowHelpMarker("对每个三角形的透明多边形进行排序。速度快，但可能会产生图形故障");
+	            ShowHelpMarker("\u5bf9\u6bcf\u4e2a\u4e09\u89d2\u5f62\u7684\u900f\u660e\u591a\u8fb9\u5f62\u8fdb\u884c\u6392\u5e8f\u3002\u901f\u5ea6\u5feb\uff0c\u4f46\u53ef\u80fd\u4f1a\u4ea7\u751f\u56fe\u5f62\u6545\u969c");
             	ImGui::NextColumn();
-		    	ImGui::RadioButton("Per条形", &renderer, 1);
+		    	ImGui::RadioButton("Per\u6761\u5f62", &renderer, 1);
 	            ImGui::SameLine();
-	            ShowHelpMarker("对每条透明多边形进行排序。更快，但可能产生图形故障");
+	            ShowHelpMarker("\u5bf9\u6bcf\u6761\u900f\u660e\u591a\u8fb9\u5f62\u8fdb\u884c\u6392\u5e8f\u3002\u66f4\u5feb\uff0c\u4f46\u53ef\u80fd\u4ea7\u751f\u56fe\u5f62\u6545\u969c");
 	            if (has_per_pixel)
 	            {
 	            	ImGui::NextColumn();
-	            	ImGui::RadioButton("Per像素", &renderer, 2);
+	            	ImGui::RadioButton("Per\u50cf\u7d20", &renderer, 2);
 	            	ImGui::SameLine();
-	            	ShowHelpMarker("对每个像素的透明多边形进行排序。速度较慢但准确");
+	            	ShowHelpMarker("\u5bf9\u6bcf\u4e2a\u50cf\u7d20\u7684\u900f\u660e\u591a\u8fb9\u5f62\u8fdb\u884c\u6392\u5e8f\u3002\u901f\u5ea6\u8f83\u6162\u4f46\u51c6\u786e");
 	            }
 		    	ImGui::Columns(1, NULL, false);
 		    	switch (renderer)
@@ -1642,41 +1642,41 @@ static void gui_display_settings()
 		    	}
 		    }
 	    	ImGui::Spacing();
-		    header("渲染选项");
+		    header("\u6e32\u67d3\u9009\u9879");
 		    {
-		    	ImGui::Text("自动跳过帧:");
-		    	ImGui::Columns(3, "自动跳过", false);
-		    	OptionRadioButton("禁用", config::AutoSkipFrame, 0, "不跳帧");
+		    	ImGui::Text("\u81ea\u52a8\u8df3\u8fc7\u5e27:");
+		    	ImGui::Columns(3, "\u81ea\u52a8\u8df3\u8fc7", false);
+		    	OptionRadioButton("\u7981\u7528", config::AutoSkipFrame, 0, "\u4e0d\u8df3\u5e27");
             	ImGui::NextColumn();
-		    	OptionRadioButton("正常的", config::AutoSkipFrame, 1, "当GPU和CPU都运行较慢时，跳过一帧");
+		    	OptionRadioButton("\u6b63\u5e38\u7684", config::AutoSkipFrame, 1, "\u5f53GPU\u548cCPU\u90fd\u8fd0\u884c\u8f83\u6162\u65f6\uff0c\u8df3\u8fc7\u4e00\u5e27");
             	ImGui::NextColumn();
-		    	OptionRadioButton("最大", config::AutoSkipFrame, 2, "当GPU运行较慢时，跳过一帧");
+		    	OptionRadioButton("\u6700\u5927", config::AutoSkipFrame, 2, "\u5f53GPU\u8fd0\u884c\u8f83\u6162\u65f6\uff0c\u8df3\u8fc7\u4e00\u5e27");
 		    	ImGui::Columns(1, nullptr, false);
 
-		    	OptionCheckbox("阴影", config::ModifierVolumes,
-		    			"启用修改器音量，通常用于阴影");
-		    	OptionCheckbox("雾", config::Fog, "启用雾效果");
-		    	OptionCheckbox("宽屏", config::Widescreen,
-		    			"在正常的4:3长宽比之外绘制几何图形。可能在显示区域产生图形故障");
+		    	OptionCheckbox("\u9634\u5f71", config::ModifierVolumes,
+		    			"\u542f\u7528\u4fee\u6539\u5668\u97f3\u91cf\uff0c\u901a\u5e38\u7528\u4e8e\u9634\u5f71");
+		    	OptionCheckbox("\u96fe", config::Fog, "\u542f\u7528\u96fe\u6548\u679c");
+		    	OptionCheckbox("\u5bbd\u5c4f", config::Widescreen,
+		    			"\u5728\u6b63\u5e38\u76844:3\u957f\u5bbd\u6bd4\u4e4b\u5916\u7ed8\u5236\u51e0\u4f55\u56fe\u5f62\u3002\u53ef\u80fd\u5728\u663e\u793a\u533a\u57df\u4ea7\u751f\u56fe\u5f62\u6545\u969c");
 		    	if (!config::Widescreen)
 		    	{
 			        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		    	}
 		    	ImGui::Indent();
-		    	OptionCheckbox("超宽屏", config::SuperWidescreen,
-		    			"当屏幕或窗口的宽高比大于16:9时，使用全宽");
+		    	OptionCheckbox("\u8d85\u5bbd\u5c4f", config::SuperWidescreen,
+		    			"\u5f53\u5c4f\u5e55\u6216\u7a97\u53e3\u7684\u5bbd\u9ad8\u6bd4\u5927\u4e8e16:9\u65f6\uff0c\u4f7f\u7528\u5168\u5bbd");
 		    	ImGui::Unindent();
 		    	if (!config::Widescreen)
 		    	{
 			        ImGui::PopItemFlag();
 			        ImGui::PopStyleVar();
 		    	}
-		    	OptionCheckbox("宽屏游戏作弊", config::WidescreenGameHacks,
-		    			"修改游戏，使其以16:9变形格式显示，并使用水平屏幕拉伸。只支持部分游戏。");
+		    	OptionCheckbox("\u5bbd\u5c4f\u6e38\u620f\u4f5c\u5f0a", config::WidescreenGameHacks,
+		    			"\u4fee\u6539\u6e38\u620f\uff0c\u4f7f\u5176\u4ee516:9\u53d8\u5f62\u683c\u5f0f\u663e\u793a\uff0c\u5e76\u4f7f\u7528\u6c34\u5e73\u5c4f\u5e55\u62c9\u4f38\u3002\u53ea\u652f\u6301\u90e8\u5206\u6e38\u620f\u3002");
 
 				const std::array<float, 5> aniso{ 1, 2, 4, 8, 16 };
-	            const std::array<std::string, 5> anisoText{ "禁用", "2x", "4x", "8x", "16x" };
+	            const std::array<std::string, 5> anisoText{ "\u7981\u7528", "2x", "4x", "8x", "16x" };
 	            u32 afSelected = 0;
 	            for (u32 i = 0; i < aniso.size(); i++)
 	            {
@@ -1687,7 +1687,7 @@ static void gui_display_settings()
                 ImGuiStyle& style = ImGui::GetStyle();
                 float innerSpacing = style.ItemInnerSpacing.x;
                 ImGui::PushItemWidth(ImGui::CalcItemWidth() - innerSpacing * 2.0f - ImGui::GetFrameHeight() * 2.0f);
-                if (ImGui::BeginCombo("##各向异性过滤", anisoText[afSelected].c_str(), ImGuiComboFlags_NoArrowButton))
+                if (ImGui::BeginCombo("##\u5404\u5411\u5f02\u6027\u8fc7\u6ee4", anisoText[afSelected].c_str(), ImGuiComboFlags_NoArrowButton))
                 {
                 	for (u32 i = 0; i < aniso.size(); i++)
                     {
@@ -1702,41 +1702,41 @@ static void gui_display_settings()
                 ImGui::PopItemWidth();
                 ImGui::SameLine(0, innerSpacing);
 
-                if (ImGui::ArrowButton("##减少各向异性滤波", ImGuiDir_Left))
+                if (ImGui::ArrowButton("##\u51cf\u5c11\u5404\u5411\u5f02\u6027\u6ee4\u6ce2", ImGuiDir_Left))
                 {
                     if (afSelected > 0)
                     	config::AnisotropicFiltering = aniso[afSelected - 1];
                 }
                 ImGui::SameLine(0, innerSpacing);
-                if (ImGui::ArrowButton("##增加各向异性滤波", ImGuiDir_Right))
+                if (ImGui::ArrowButton("##\u589e\u52a0\u5404\u5411\u5f02\u6027\u6ee4\u6ce2", ImGuiDir_Right))
                 {
                     if (afSelected < aniso.size() - 1)
                     	config::AnisotropicFiltering = aniso[afSelected + 1];
                 }
                 ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-                ImGui::Text("各向异性过滤");
+                ImGui::Text("\u5404\u5411\u5f02\u6027\u8fc7\u6ee4");
                 ImGui::SameLine();
-                ShowHelpMarker("更高的值使以倾斜角度查看的纹理看起来更清晰，但对GPU的要求更高。此选项仅对mipmap纹理有可见影响。");
+                ShowHelpMarker("\u66f4\u9ad8\u7684\u503c\u4f7f\u4ee5\u503e\u659c\u89d2\u5ea6\u67e5\u770b\u7684\u7eb9\u7406\u770b\u8d77\u6765\u66f4\u6e05\u6670\uff0c\u4f46\u5bf9GPU\u7684\u8981\u6c42\u66f4\u9ad8\u3002\u6b64\u9009\u9879\u4ec5\u5bf9mipmap\u7eb9\u7406\u6709\u53ef\u89c1\u5f71\u54cd\u3002");
 
-		    	ImGui::Text("纹理过滤:");
-		    	ImGui::Columns(3, "纹理过滤", false);
-		    	OptionRadioButton("默认", config::TextureFiltering, 0, "使用游戏默认的纹理过滤");
+		    	ImGui::Text("\u7eb9\u7406\u8fc7\u6ee4:");
+		    	ImGui::Columns(3, "\u7eb9\u7406\u8fc7\u6ee4", false);
+		    	OptionRadioButton("\u9ed8\u8ba4", config::TextureFiltering, 0, "\u4f7f\u7528\u6e38\u620f\u9ed8\u8ba4\u7684\u7eb9\u7406\u8fc7\u6ee4");
             	ImGui::NextColumn();
-		    	OptionRadioButton("强制最近邻居", config::TextureFiltering, 1, "对所有纹理强制最近邻居过滤。外观更清晰，但可能会导致各种渲染问题。此选项通常不会影响性能。");
+		    	OptionRadioButton("\u5f3a\u5236\u6700\u8fd1\u90bb\u5c45", config::TextureFiltering, 1, "\u5bf9\u6240\u6709\u7eb9\u7406\u5f3a\u5236\u6700\u8fd1\u90bb\u5c45\u8fc7\u6ee4\u3002\u5916\u89c2\u66f4\u6e05\u6670\uff0c\u4f46\u53ef\u80fd\u4f1a\u5bfc\u81f4\u5404\u79cd\u6e32\u67d3\u95ee\u9898\u3002\u6b64\u9009\u9879\u901a\u5e38\u4e0d\u4f1a\u5f71\u54cd\u6027\u80fd\u3002");
             	ImGui::NextColumn();
-		    	OptionRadioButton("强制线性", config::TextureFiltering, 2, "对所有纹理强制进行线性过滤。外观更平滑，但可能会导致各种渲染问题。此选项通常不会影响性能。");
+		    	OptionRadioButton("\u5f3a\u5236\u7ebf\u6027", config::TextureFiltering, 2, "\u5bf9\u6240\u6709\u7eb9\u7406\u5f3a\u5236\u8fdb\u884c\u7ebf\u6027\u8fc7\u6ee4\u3002\u5916\u89c2\u66f4\u5e73\u6ed1\uff0c\u4f46\u53ef\u80fd\u4f1a\u5bfc\u81f4\u5404\u79cd\u6e32\u67d3\u95ee\u9898\u3002\u6b64\u9009\u9879\u901a\u5e38\u4e0d\u4f1a\u5f71\u54cd\u6027\u80fd\u3002");
 		    	ImGui::Columns(1, nullptr, false);
 
 #ifndef TARGET_IPHONE
-		    	OptionCheckbox("垂直同步", config::VSync, "同步帧速率与屏幕刷新率。推荐");
+		    	OptionCheckbox("\u5782\u76f4\u540c\u6b65", config::VSync, "\u540c\u6b65\u5e27\u901f\u7387\u4e0e\u5c4f\u5e55\u5237\u65b0\u7387\u3002\u63a8\u8350");
 		    	ImGui::Indent();
 		    	if (!config::VSync || !isVulkan(config::RendererType))
 		    	{
 			        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		    	}
-	    		OptionCheckbox("复制帧", config::DupeFrames, "在高刷新率监视器上重复帧(120赫兹或更高)");
+	    		OptionCheckbox("\u590d\u5236\u5e27", config::DupeFrames, "\u5728\u9ad8\u5237\u65b0\u7387\u76d1\u89c6\u5668\u4e0a\u91cd\u590d\u5e27(120\u8d6b\u5179\u6216\u66f4\u9ad8)");
 		    	if (!config::VSync || !isVulkan(config::RendererType))
 		    	{
 			        ImGui::PopItemFlag();
@@ -1744,11 +1744,11 @@ static void gui_display_settings()
 		    	}
 		    	ImGui::Unindent();
 #endif
-		    	OptionCheckbox("显示FPS计数器", config::ShowFPS, "显示屏幕上的帧/秒计数器");
-		    	OptionCheckbox("在游戏中显示VMU", config::FloatVMUs, "在游戏中显示VMU LCD屏幕");
-		    	OptionCheckbox("旋转屏幕90°", config::Rotate90, "逆时针旋转屏幕90°");
-		    	OptionCheckbox("延迟帧交换", config::DelayFrameSwapping,
-		    			"有助于避免屏幕闪烁或视频故障。不建议在慢速平台上使用");
+		    	OptionCheckbox("\u663e\u793aFPS\u8ba1\u6570\u5668", config::ShowFPS, "\u663e\u793a\u5c4f\u5e55\u4e0a\u7684\u5e27/\u79d2\u8ba1\u6570\u5668");
+		    	OptionCheckbox("\u5728\u6e38\u620f\u4e2d\u663e\u793aVMU", config::FloatVMUs, "\u5728\u6e38\u620f\u4e2d\u663e\u793aVMU LCD\u5c4f\u5e55");
+		    	OptionCheckbox("\u65cb\u8f6c\u5c4f\u5e5590\u00b0", config::Rotate90, "\u9006\u65f6\u9488\u65cb\u8f6c\u5c4f\u5e5590\u00b0");
+		    	OptionCheckbox("\u5ef6\u8fdf\u5e27\u4ea4\u6362", config::DelayFrameSwapping,
+		    			"\u6709\u52a9\u4e8e\u907f\u514d\u5c4f\u5e55\u95ea\u70c1\u6216\u89c6\u9891\u6545\u969c\u3002\u4e0d\u5efa\u8bae\u5728\u6162\u901f\u5e73\u53f0\u4e0a\u4f7f\u7528");
 		    	constexpr int apiCount = 0
 					#ifdef USE_VULKAN
 		    			+ 1
@@ -1766,8 +1766,8 @@ static void gui_display_settings()
 
 		    	if (apiCount > 1)
 		    	{
-		    		ImGui::Text("图形API:");
-					ImGui::Columns(apiCount, "渲染Api", false);
+		    		ImGui::Text("\u56fe\u5f62API:");
+					ImGui::Columns(apiCount, "\u6e32\u67d3Api", false);
 #ifdef USE_OPENGL
 					ImGui::RadioButton("Open GL", &renderApi, 0);
 					ImGui::NextColumn();
@@ -1788,7 +1788,7 @@ static void gui_display_settings()
 		    	}
 
 	            const std::array<float, 13> scalings{ 0.5f, 1.f, 1.5f, 2.f, 2.5f, 3.f, 4.f, 4.5f, 5.f, 6.f, 7.f, 8.f, 9.f };
-	            const std::array<std::string, 13> scalingsText{ "一半", "本地", "x1.5", "x2", "x2.5", "x3", "x4", "x4.5", "x5", "x6", "x7", "x8", "x9" };
+	            const std::array<std::string, 13> scalingsText{ "\u4e00\u534a", "\u672c\u5730", "x1.5", "x2", "x2.5", "x3", "x4", "x4.5", "x5", "x6", "x7", "x8", "x9" };
 	            std::array<int, scalings.size()> vres;
 	            std::array<std::string, scalings.size()> resLabels;
 	            u32 selected = 0;
@@ -1805,7 +1805,7 @@ static void gui_display_settings()
 	            }
 
                 ImGui::PushItemWidth(ImGui::CalcItemWidth() - innerSpacing * 2.0f - ImGui::GetFrameHeight() * 2.0f);
-                if (ImGui::BeginCombo("##决议", resLabels[selected].c_str(), ImGuiComboFlags_NoArrowButton))
+                if (ImGui::BeginCombo("##\u51b3\u8bae", resLabels[selected].c_str(), ImGuiComboFlags_NoArrowButton))
                 {
                 	for (u32 i = 0; i < scalings.size(); i++)
                     {
@@ -1820,47 +1820,47 @@ static void gui_display_settings()
                 ImGui::PopItemWidth();
                 ImGui::SameLine(0, innerSpacing);
 
-                if (ImGui::ArrowButton("##减少分辨率", ImGuiDir_Left))
+                if (ImGui::ArrowButton("##\u51cf\u5c11\u5206\u8fa8\u7387", ImGuiDir_Left))
                 {
                     if (selected > 0)
                     	config::RenderResolution = vres[selected - 1];
                 }
                 ImGui::SameLine(0, innerSpacing);
-                if (ImGui::ArrowButton("##增加分辨率", ImGuiDir_Right))
+                if (ImGui::ArrowButton("##\u589e\u52a0\u5206\u8fa8\u7387", ImGuiDir_Right))
                 {
                     if (selected < vres.size() - 1)
                     	config::RenderResolution = vres[selected + 1];
                 }
                 ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-                ImGui::Text("内部分辨率");
+                ImGui::Text("\u5185\u90e8\u5206\u8fa8\u7387");
                 ImGui::SameLine();
-                ShowHelpMarker("内部渲染分辨率。越高越好，但对GPU的要求越高。可以使用高于显示分辨率的值（但不超过显示分辨率的两倍）进行超级采样，这样可以在不降低清晰度的情况下提供高质量的抗锯齿。");
+                ShowHelpMarker("\u5185\u90e8\u6e32\u67d3\u5206\u8fa8\u7387\u3002\u8d8a\u9ad8\u8d8a\u597d\uff0c\u4f46\u5bf9GPU\u7684\u8981\u6c42\u8d8a\u9ad8\u3002\u53ef\u4ee5\u4f7f\u7528\u9ad8\u4e8e\u663e\u793a\u5206\u8fa8\u7387\u7684\u503c\uff08\u4f46\u4e0d\u8d85\u8fc7\u663e\u793a\u5206\u8fa8\u7387\u7684\u4e24\u500d\uff09\u8fdb\u884c\u8d85\u7ea7\u91c7\u6837\uff0c\u8fd9\u6837\u53ef\u4ee5\u5728\u4e0d\u964d\u4f4e\u6e05\u6670\u5ea6\u7684\u60c5\u51b5\u4e0b\u63d0\u4f9b\u9ad8\u8d28\u91cf\u7684\u6297\u952f\u9f7f\u3002");
 
-		    	OptionSlider("水平拉伸", config::ScreenStretching, 100, 150,
-		    			"水平拉伸屏幕");
-		    	OptionArrowButtons("跳帧", config::SkipFrame, 0, 6,
-		    			"两个实际渲染帧之间要跳过的帧数");
+		    	OptionSlider("\u6c34\u5e73\u62c9\u4f38", config::ScreenStretching, 100, 150,
+		    			"\u6c34\u5e73\u62c9\u4f38\u5c4f\u5e55");
+		    	OptionArrowButtons("\u8df3\u5e27", config::SkipFrame, 0, 6,
+		    			"\u4e24\u4e2a\u5b9e\u9645\u6e32\u67d3\u5e27\u4e4b\u95f4\u8981\u8df3\u8fc7\u7684\u5e27\u6570");
 		    }
 	    	ImGui::Spacing();
-		    header("渲染到纹理");
+		    header("\u6e32\u67d3\u5230\u7eb9\u7406");
 		    {
-		    	OptionCheckbox("复制到VRAM", config::RenderToTextureBuffer,
-		    			"将渲染的纹理复制回VRAM。速度较慢但准确");
+		    	OptionCheckbox("\u590d\u5236\u5230VRAM", config::RenderToTextureBuffer,
+		    			"\u5c06\u6e32\u67d3\u7684\u7eb9\u7406\u590d\u5236\u56deVRAM\u3002\u901f\u5ea6\u8f83\u6162\u4f46\u51c6\u786e");
 		    }
 	    	ImGui::Spacing();
-		    header("纹理放大");
+		    header("\u7eb9\u7406\u653e\u5927");
 		    {
 #ifndef TARGET_NO_OPENMP
-		    	OptionArrowButtons("纹理放大", config::TextureUpscale, 1, 8,
-		    			"使用xBRZ算法放大纹理。仅适用于快速平台和某些2D游戏");
-		    	OptionSlider("纹理最大大小", config::MaxFilteredTextureSize, 8, 1024,
-		    			"大于此尺寸平方的纹理将不会放大");
-		    	OptionArrowButtons("最大线程数", config::MaxThreads, 1, 8,
-		    			"用于纹理放大的最大线程数。建议：物理核数减1");
+		    	OptionArrowButtons("\u7eb9\u7406\u653e\u5927", config::TextureUpscale, 1, 8,
+		    			"\u4f7f\u7528xBRZ\u7b97\u6cd5\u653e\u5927\u7eb9\u7406\u3002\u4ec5\u9002\u7528\u4e8e\u5feb\u901f\u5e73\u53f0\u548c\u67d0\u4e9b2D\u6e38\u620f");
+		    	OptionSlider("\u7eb9\u7406\u6700\u5927\u5927\u5c0f", config::MaxFilteredTextureSize, 8, 1024,
+		    			"\u5927\u4e8e\u6b64\u5c3a\u5bf8\u5e73\u65b9\u7684\u7eb9\u7406\u5c06\u4e0d\u4f1a\u653e\u5927");
+		    	OptionArrowButtons("\u6700\u5927\u7ebf\u7a0b\u6570", config::MaxThreads, 1, 8,
+		    			"\u7528\u4e8e\u7eb9\u7406\u653e\u5927\u7684\u6700\u5927\u7ebf\u7a0b\u6570\u3002\u5efa\u8bae\uff1a\u7269\u7406\u6838\u6570\u51cf1");
 #endif
-		    	OptionCheckbox("加载自定义纹理", config::CustomTextures,
-		    			"从data/textures/<game id>加载自定义/高分辨率纹理");
+		    	OptionCheckbox("\u52a0\u8f7d\u81ea\u5b9a\u4e49\u7eb9\u7406", config::CustomTextures,
+		    			"\u4ecedata/textures/<game id>\u52a0\u8f7d\u81ea\u5b9a\u4e49/\u9ad8\u5206\u8fa8\u7387\u7eb9\u7406");
 		    }
 			ImGui::PopStyleVar();
 			ImGui::EndTabItem();
@@ -1881,28 +1881,28 @@ static void gui_display_settings()
 		    	break;
 		    }
 		}
-		if (ImGui::BeginTabItem("音频"))
+		if (ImGui::BeginTabItem("\u97f3\u9891"))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
-			OptionCheckbox("启用 DSP", config::DSPEnabled,
-					"启用Dreamcast数字声音处理器。只推荐在快速平台上使用");
-			if (OptionSlider("音量级别", config::AudioVolume, 0, 100, "调整模拟器的音频级别"))
+			OptionCheckbox("\u542f\u7528 DSP", config::DSPEnabled,
+					"\u542f\u7528Dreamcast\u6570\u5b57\u58f0\u97f3\u5904\u7406\u5668\u3002\u53ea\u63a8\u8350\u5728\u5feb\u901f\u5e73\u53f0\u4e0a\u4f7f\u7528");
+			if (OptionSlider("\u97f3\u91cf\u7ea7\u522b", config::AudioVolume, 0, 100, "\u8c03\u6574\u6a21\u62df\u5668\u7684\u97f3\u9891\u7ea7\u522b"))
 			{
 				config::AudioVolume.calcDbPower();
 			};
 #ifdef __ANDROID__
 			if (config::AudioBackend.get() == "auto" || config::AudioBackend.get() == "android")
-				OptionCheckbox("自动延迟", config::AutoLatency,
-						"自动设置音频延迟。推荐");
+				OptionCheckbox("\u81ea\u52a8\u5ef6\u8fdf", config::AutoLatency,
+						"\u81ea\u52a8\u8bbe\u7f6e\u97f3\u9891\u5ef6\u8fdf\u3002\u63a8\u8350");
 #endif
             if (!config::AutoLatency
             		|| (config::AudioBackend.get() != "auto" && config::AudioBackend.get() != "android"))
             {
 				int latency = (int)roundf(config::AudioBufferSize * 1000.f / 44100.f);
-				ImGui::SliderInt("延迟", &latency, 12, 512, "%d ms");
+				ImGui::SliderInt("\u5ef6\u8fdf", &latency, 12, 512, "%d ms");
 				config::AudioBufferSize = (int)roundf(latency * 44100.f / 1000.f);
 				ImGui::SameLine();
-				ShowHelpMarker("设置最大音频延迟。并非所有音频驱动程序都支持。");
+				ShowHelpMarker("\u8bbe\u7f6e\u6700\u5927\u97f3\u9891\u5ef6\u8fdf\u3002\u5e76\u975e\u6240\u6709\u97f3\u9891\u9a71\u52a8\u7a0b\u5e8f\u90fd\u652f\u6301\u3002");
             }
 
 			audiobackend_t* backend = nullptr;
@@ -1915,10 +1915,10 @@ static void gui_display_settings()
 			}
 
 			audiobackend_t* current_backend = backend;
-			if (ImGui::BeginCombo("音频驱动程序", backend_name.c_str(), ImGuiComboFlags_None))
+			if (ImGui::BeginCombo("\u97f3\u9891\u9a71\u52a8\u7a0b\u5e8f", backend_name.c_str(), ImGuiComboFlags_None))
 			{
 				bool is_selected = (config::AudioBackend.get() == "auto");
-				if (ImGui::Selectable("auto -自动选择驱动程序", &is_selected))
+				if (ImGui::Selectable("auto -\u81ea\u52a8\u9009\u62e9\u9a71\u52a8\u7a0b\u5e8f", &is_selected))
 					config::AudioBackend.set("auto");
 
 				for (u32 i = 0; i < GetAudioBackendCount(); i++)
@@ -1937,7 +1937,7 @@ static void gui_display_settings()
 				ImGui::EndCombo();
 			}
 			ImGui::SameLine();
-			ShowHelpMarker("要使用的音频驱动程序");
+			ShowHelpMarker("\u8981\u4f7f\u7528\u7684\u97f3\u9891\u9a71\u52a8\u7a0b\u5e8f");
 
 			if (current_backend != NULL && current_backend->get_options != NULL)
 			{
@@ -1983,7 +1983,7 @@ static void gui_display_settings()
 						}
 					}
 					else {
-						WARN_LOG(RENDERER, "未知选项");
+						WARN_LOG(RENDERER, "\u672a\u77e5\u9009\u9879");
 					}
 
 					options++;
@@ -1993,97 +1993,97 @@ static void gui_display_settings()
 			ImGui::PopStyleVar();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("高级"))
+		if (ImGui::BeginTabItem("\u9ad8\u7ea7"))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
-		    header("CPU 模式");
+		    header("CPU \u6a21\u5f0f");
 		    {
 				ImGui::Columns(2, "cpu_modes", false);
-				OptionRadioButton("动态编译", config::DynarecEnabled, true,
-					"使用动态重新编译程序。大多数情况下推荐");
+				OptionRadioButton("\u52a8\u6001\u7f16\u8bd1", config::DynarecEnabled, true,
+					"\u4f7f\u7528\u52a8\u6001\u91cd\u65b0\u7f16\u8bd1\u7a0b\u5e8f\u3002\u5927\u591a\u6570\u60c5\u51b5\u4e0b\u63a8\u8350");
 				ImGui::NextColumn();
-				OptionRadioButton("翻译", config::DynarecEnabled, false,
-					"使用解释器。非常慢，但可能有助于解决动态问题");
+				OptionRadioButton("\u7ffb\u8bd1", config::DynarecEnabled, false,
+					"\u4f7f\u7528\u89e3\u91ca\u5668\u3002\u975e\u5e38\u6162\uff0c\u4f46\u53ef\u80fd\u6709\u52a9\u4e8e\u89e3\u51b3\u52a8\u6001\u95ee\u9898");
 				ImGui::Columns(1, NULL, false);
 		    }
 		    if (config::DynarecEnabled)
 		    {
 		    	ImGui::Spacing();
-		    	header("动态编译设置");
-		    	OptionCheckbox("闲置跳过", config::DynarecIdleSkip, "跳过等待循环。推荐");
+		    	header("\u52a8\u6001\u7f16\u8bd1\u8bbe\u7f6e");
+		    	OptionCheckbox("\u95f2\u7f6e\u8df3\u8fc7", config::DynarecIdleSkip, "\u8df3\u8fc7\u7b49\u5f85\u5faa\u73af\u3002\u63a8\u8350");
 		    }
 	    	ImGui::Spacing();
-		    header("网络");
+		    header("\u7f51\u7edc");
 		    {
-		    	OptionCheckbox("宽带适配器仿真", config::EmulateBBA,
-		    			"模拟以太网宽带适配器(BBA)而不是调制解调器");
-		    	OptionCheckbox("启用GGPO组网", config::GGPOEnable,
-		    			"启用GGPO组网");
-		    	OptionCheckbox("启用Naomi网络", config::NetworkEnable,
-		    			"为支持的Naomi游戏启用网络");
+		    	OptionCheckbox("\u5bbd\u5e26\u9002\u914d\u5668\u4eff\u771f", config::EmulateBBA,
+		    			"\u6a21\u62df\u4ee5\u592a\u7f51\u5bbd\u5e26\u9002\u914d\u5668(BBA)\u800c\u4e0d\u662f\u8c03\u5236\u89e3\u8c03\u5668");
+		    	OptionCheckbox("\u542f\u7528GGPO\u7ec4\u7f51", config::GGPOEnable,
+		    			"\u542f\u7528GGPO\u7ec4\u7f51");
+		    	OptionCheckbox("\u542f\u7528Naomi\u7f51\u7edc", config::NetworkEnable,
+		    			"\u4e3a\u652f\u6301\u7684Naomi\u6e38\u620f\u542f\u7528\u7f51\u7edc");
 		    	if (config::GGPOEnable)
 		    	{
 		    		config::NetworkEnable = false;
-					OptionCheckbox("以玩家1身份玩游戏", config::ActAsServer,
-							"取消选择作为玩家2进行游戏");
+					OptionCheckbox("\u4ee5\u73a9\u5bb61\u8eab\u4efd\u73a9\u6e38\u620f", config::ActAsServer,
+							"\u53d6\u6d88\u9009\u62e9\u4f5c\u4e3a\u73a9\u5bb62\u8fdb\u884c\u6e38\u620f");
 					char server_name[256];
 					strcpy(server_name, config::NetworkServer.get().c_str());
-					ImGui::InputText("同行", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+					ImGui::InputText("\u540c\u884c", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("您的对等IP地址和可选端口");
+					ShowHelpMarker("\u60a8\u7684\u5bf9\u7b49IP\u5730\u5740\u548c\u53ef\u9009\u7aef\u53e3");
 					config::NetworkServer.set(server_name);
-					OptionSlider("帧延迟", config::GGPODelay, 0, 20,
-						"设置帧延迟，建议使用ping >100毫秒的会话");
+					OptionSlider("\u5e27\u5ef6\u8fdf", config::GGPODelay, 0, 20,
+						"\u8bbe\u7f6e\u5e27\u5ef6\u8fdf\uff0c\u5efa\u8bae\u4f7f\u7528ping >100\u6beb\u79d2\u7684\u4f1a\u8bdd");
 
-					ImGui::Text("左侧指杆:");
-					OptionRadioButton<int>("禁用", config::GGPOAnalogAxes, 0, "左手拇指杆未使用");
+					ImGui::Text("\u5de6\u4fa7\u6307\u6746:");
+					OptionRadioButton<int>("\u7981\u7528", config::GGPOAnalogAxes, 0, "\u5de6\u624b\u62c7\u6307\u6746\u672a\u4f7f\u7528");
 					ImGui::SameLine();
-					OptionRadioButton<int>("水平", config::GGPOAnalogAxes, 1, "只使用左拇指杆水平轴");
+					OptionRadioButton<int>("\u6c34\u5e73", config::GGPOAnalogAxes, 1, "\u53ea\u4f7f\u7528\u5de6\u62c7\u6307\u6746\u6c34\u5e73\u8f74");
 					ImGui::SameLine();
-					OptionRadioButton<int>("完整", config::GGPOAnalogAxes, 2, "使用左手拇指杆的水平和垂直轴");
+					OptionRadioButton<int>("\u5b8c\u6574", config::GGPOAnalogAxes, 2, "\u4f7f\u7528\u5de6\u624b\u62c7\u6307\u6746\u7684\u6c34\u5e73\u548c\u5782\u76f4\u8f74");
 
-					OptionCheckbox("启用聊天", config::GGPOChat, "收到聊天信息后打开聊天窗口");
-					OptionCheckbox("网络统计信息", config::NetworkStats,
-			    			"在屏幕上显示网络统计信息");
+					OptionCheckbox("\u542f\u7528\u804a\u5929", config::GGPOChat, "\u6536\u5230\u804a\u5929\u4fe1\u606f\u540e\u6253\u5f00\u804a\u5929\u7a97\u53e3");
+					OptionCheckbox("\u7f51\u7edc\u7edf\u8ba1\u4fe1\u606f", config::NetworkStats,
+			    			"\u5728\u5c4f\u5e55\u4e0a\u663e\u793a\u7f51\u7edc\u7edf\u8ba1\u4fe1\u606f");
 		    	}
 		    	else if (config::NetworkEnable)
 		    	{
-					OptionCheckbox("充当服务器", config::ActAsServer,
-							"为Naomi网络游戏创建本地服务器");
+					OptionCheckbox("\u5145\u5f53\u670d\u52a1\u5668", config::ActAsServer,
+							"\u4e3aNaomi\u7f51\u7edc\u6e38\u620f\u521b\u5efa\u672c\u5730\u670d\u52a1\u5668");
 					if (!config::ActAsServer)
 					{
 						char server_name[256];
 						strcpy(server_name, config::NetworkServer.get().c_str());
-						ImGui::InputText("服务器", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+						ImGui::InputText("\u670d\u52a1\u5668", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 						ImGui::SameLine();
-						ShowHelpMarker("要连接的服务器。保留为空将自动在默认端口上查找服务器");
+						ShowHelpMarker("\u8981\u8fde\u63a5\u7684\u670d\u52a1\u5668\u3002\u4fdd\u7559\u4e3a\u7a7a\u5c06\u81ea\u52a8\u5728\u9ed8\u8ba4\u7aef\u53e3\u4e0a\u67e5\u627e\u670d\u52a1\u5668");
 						config::NetworkServer.set(server_name);
 					}
 					char localPort[256];
 					sprintf(localPort, "%d", (int)config::LocalPort);
-					ImGui::InputText("本地端口", localPort, sizeof(localPort), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
+					ImGui::InputText("\u672c\u5730\u7aef\u53e3", localPort, sizeof(localPort), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("要使用的本地UDP端口");
+					ShowHelpMarker("\u8981\u4f7f\u7528\u7684\u672c\u5730UDP\u7aef\u53e3");
 					config::LocalPort.set(atoi(localPort));
 		    	}
-				OptionCheckbox("启用UPnP", config::EnableUPnP);
+				OptionCheckbox("\u542f\u7528UPnP", config::EnableUPnP);
 				ImGui::SameLine();
-				ShowHelpMarker("为网络游戏自动配置网络路由器");
+				ShowHelpMarker("\u4e3a\u7f51\u7edc\u6e38\u620f\u81ea\u52a8\u914d\u7f6e\u7f51\u7edc\u8def\u7531\u5668");
 		    }
 	    	ImGui::Spacing();
-		    header("其他");
+		    header("\u5176\u4ed6");
 		    {
-		    	OptionCheckbox("HLE BIOS", config::UseReios, "强制高级BIOS仿真");
-	            OptionCheckbox("强制Windows CE", config::ForceWindowsCE,
-	            		"启用完整的MMU模拟和其他Windows CE设置。除非必要，否则不要启用");
-	            OptionCheckbox("多线程仿真", config::ThreadedRendering,
-	            		"在不同的线程上运行模拟的CPU和GPU");
+		    	OptionCheckbox("HLE BIOS", config::UseReios, "\u5f3a\u5236\u9ad8\u7ea7BIOS\u4eff\u771f");
+	            OptionCheckbox("\u5f3a\u5236Windows CE", config::ForceWindowsCE,
+	            		"\u542f\u7528\u5b8c\u6574\u7684MMU\u6a21\u62df\u548c\u5176\u4ed6Windows CE\u8bbe\u7f6e\u3002\u9664\u975e\u5fc5\u8981\uff0c\u5426\u5219\u4e0d\u8981\u542f\u7528");
+	            OptionCheckbox("\u591a\u7ebf\u7a0b\u4eff\u771f", config::ThreadedRendering,
+	            		"\u5728\u4e0d\u540c\u7684\u7ebf\u7a0b\u4e0a\u8fd0\u884c\u6a21\u62df\u7684CPU\u548cGPU");
 #ifndef __ANDROID
-	            OptionCheckbox("串行控制台", config::SerialConsole,
-	            		"将Dreamcast串行控制台转储到stdout");
+	            OptionCheckbox("\u4e32\u884c\u63a7\u5236\u53f0", config::SerialConsole,
+	            		"\u5c06Dreamcast\u4e32\u884c\u63a7\u5236\u53f0\u8f6c\u50a8\u5230stdout");
 #endif
-	            OptionCheckbox("转储纹理", config::DumpTextures,
-	            		"将所有纹理转储到data/texdump/<game id>");
+	            OptionCheckbox("\u8f6c\u50a8\u7eb9\u7406", config::DumpTextures,
+	            		"\u5c06\u6240\u6709\u7eb9\u7406\u8f6c\u50a8\u5230data/texdump/<game id>");
 
 	            bool logToFile = cfgLoadBool("log", "LogToFile", false);
 	            bool newLogToFile = logToFile;
