@@ -183,10 +183,11 @@ void gui_initFonts()
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->Clear();
 	const float fontSize = 17.f * settings.display.uiScale;
-	io.Fonts->AddFontFromMemoryCompressedTTF(roboto_medium_compressed_data, roboto_medium_compressed_size, fontSize, nullptr, ranges);
+	io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, nullptr, ranges);
+	//io.Fonts->AddFontFromMemoryCompressedTTF(roboto_medium_compressed_data, roboto_medium_compressed_size, fontSize, nullptr, ranges);
     ImFontConfig font_cfg;
     font_cfg.MergeMode = true;
-    io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", 16.0f);
+
 #ifdef _WIN32
     u32 cp = GetACP();
     std::string fontDir = std::string(nowide::getenv("SYSTEMROOT")) + "\\Fonts\\";
