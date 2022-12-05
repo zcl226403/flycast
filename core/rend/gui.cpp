@@ -264,9 +264,9 @@ void gui_initFonts()
         if (glyphRanges != nullptr)
         	io.Fonts->AddFontFromFileTTF("/system/fonts/NotoSansCJK-Regular.ttc", fontSize, &font_cfg, glyphRanges);
     }
-io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, &font_cfg, glyphRanges);
     // TODO Linux, iOS, ...
 #endif
+    io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, &font_cfg, glyphRanges);
 	NOTICE_LOG(RENDERER, "Screen DPI is %.0f, size %d x %d. Scaling by %.2f", settings.display.dpi, settings.display.width, settings.display.height, settings.display.uiScale);
 }
 
