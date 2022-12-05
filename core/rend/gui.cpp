@@ -246,7 +246,8 @@ void gui_initFonts()
     {
         io.Fonts->AddFontFromFileTTF((fontDir + "PingFang.ttc").c_str(), fontSize, &font_cfg, GetGlyphRangesChineseSimplifiedOfficial());
     }
-#elif defined(__ANDROID__)
+#endif
+//#elif defined(__ANDROID__)
     if (getenv("FLYCAST_LOCALE") != nullptr)
     {
     	const ImWchar *glyphRanges = nullptr;
@@ -262,11 +263,11 @@ void gui_initFonts()
         	glyphRanges = GetGlyphRangesChineseSimplifiedOfficial();
 
         if (glyphRanges != nullptr)
-        	io.Fonts->AddFontFromFileTTF("/system/fonts/NotoSansCJK-Regular.ttc", fontSize, &font_cfg, glyphRanges);
+        	io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, &font_cfg, glyphRanges);
     }
     // TODO Linux, iOS, ...
-#endif
-    io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, &font_cfg, glyphRanges);
+//#endif
+    //io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", fontSize, &font_cfg, glyphRanges);
 	NOTICE_LOG(RENDERER, "Screen DPI is %.0f, size %d x %d. Scaling by %.2f", settings.display.dpi, settings.display.width, settings.display.height, settings.display.uiScale);
 }
 
