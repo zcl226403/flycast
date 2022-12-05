@@ -149,7 +149,7 @@ void gui_initFonts()
 	verify(inited);
 	if (settings.display.uiScale == uiScale && ImGui::GetIO().Fonts->IsBuilt())
 		return;
-	io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", 16.0f);
+
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
@@ -186,6 +186,7 @@ void gui_initFonts()
 	io.Fonts->AddFontFromMemoryCompressedTTF(roboto_medium_compressed_data, roboto_medium_compressed_size, fontSize, nullptr, ranges);
     ImFontConfig font_cfg;
     font_cfg.MergeMode = true;
+    io.Fonts->AddFontFromFileTTF("/storage/.config/retroarch/regular.ttf", 16.0f);
 #ifdef _WIN32
     u32 cp = GetACP();
     std::string fontDir = std::string(nowide::getenv("SYSTEMROOT")) + "\\Fonts\\";
