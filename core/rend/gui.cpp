@@ -552,7 +552,7 @@ static void gui_display_commands()
 	ImGui::Columns(2, "buttons", false);
 
 	// Settings
-	if (ImGui::Button("设置", ScaledVec2(150, 50)))
+	if (ImGui::Button("设置(慎用)", ScaledVec2(150, 50)))
 	{
 		gui_state = GuiState::Settings;
 	}
